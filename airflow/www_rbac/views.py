@@ -234,8 +234,8 @@ class Airflow(AirflowBaseView):
 
         if arg_search_query:
             query = query.filter(
-                    DagModel.dag_id.ilike('%' + arg_search_query + '%') |
-                    DagModel.owners.ilike('%' + arg_search_query + '%')
+                DagModel.dag_id.ilike('%' + arg_search_query + '%') |
+                DagModel.owners.ilike('%' + arg_search_query + '%')
             )
 
         import_errors = session.query(errors.ImportError).all()
