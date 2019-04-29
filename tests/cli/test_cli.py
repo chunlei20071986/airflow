@@ -19,9 +19,8 @@
 #
 
 import logging
-from six import StringIO
+from six import StringIO, PY2
 import sys
-import unittest2 as unittest
 
 from datetime import datetime, timedelta, time
 from mock import patch, Mock, MagicMock
@@ -39,6 +38,11 @@ from airflow.utils.state import State
 from airflow.settings import Session
 from airflow import models
 from tests.compat import mock
+if PY2:
+    # Need `assertWarns` back-ported from unittest2
+    import unittest2 as unittest
+else:
+    import unittest
 
 import os
 
