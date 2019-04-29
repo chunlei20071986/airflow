@@ -18,9 +18,10 @@
 # under the License.
 #
 
+import logging
 from six import StringIO
 import sys
-import unittest
+import unittest2 as unittest
 
 from datetime import datetime, timedelta, time
 from mock import patch, Mock, MagicMock
@@ -314,10 +315,11 @@ class TestCLI(unittest.TestCase):
         mock_run.reset_mock()
         dag = self.dagbag.get_dag('example_bash_operator')
 
-        with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
-            cli.backfill(self.parser.parse_args([
-                'backfill', 'example_bash_operator', '-t', 'runme_0', '--dry_run',
-                '-s', DEFAULT_DATE.isoformat()]), dag=dag)
+        with self.assertLogs(level=logging.DEBUG):
+            with mock.patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+                cli.backfill(self.parser.parse_args([
+                    'backfill', 'example_bash_operator', '-t', 'runme_0', '--dry_run',
+                    '-s', DEFAULT_DATE.isoformat()]), dag=dag)
 
         mock_stdout.seek(0, 0)
         self.assertListEqual(
